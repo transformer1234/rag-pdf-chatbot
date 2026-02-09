@@ -1,0 +1,5 @@
+streamlit
+chromadb
+huggingface-hub
+pypdf
+python-dotenv
