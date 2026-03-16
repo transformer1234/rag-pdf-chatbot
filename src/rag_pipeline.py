@@ -1,6 +1,7 @@
 import chromadb
 import os
 from dotenv import load_dotenv
+import streamlit as st
 #from sentence_transformers import SentenceTransformer
 from huggingface_hub import InferenceClient
 from config import *
@@ -19,7 +20,7 @@ load_dotenv()   # Load environment variables from .env file
 
 llm = InferenceClient(
     model=LLM_MODEL,
-    token=os.getenv("HF_TOKEN")
+    token=os.getenv("HF_TOKEN") or st.secrets.get("HF_TOKEN")
 )
 
 
