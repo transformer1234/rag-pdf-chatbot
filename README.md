@@ -6,15 +6,18 @@ A Retrieval-Augmented Generation (RAG) application that allows users to upload P
 - PDF ingestion and chunking
 - Semantic search using embeddings
 - ChromaDB vector database
-- Hugging Face hosted LLM (Mistral Instruct)
+- Groq hosted LLM (llama-3.1-8b-instant)
 - Conditional retrieval (context used only when needed)
 - Streamlit UI
 
 ## 🛠 Tech Stack
 - Python
-- Hugging Face Inference API
+- Groq Inference API
 - ChromaDB
 - Streamlit
+
+## 🚀 Live Demo
+**[https://mt-rag-pdf-chatbot.streamlit.app/](https://mt-rag-pdf-chatbot.streamlit.app/)**
 
 ## ▶️ How to Run
 ```bash
