@@ -2,6 +2,7 @@ import chromadb
 import os
 from dotenv import load_dotenv
 import streamlit as st
+from groq import Groq
 #from sentence_transformers import SentenceTransformer
 from huggingface_hub import InferenceClient
 from config import *
@@ -17,11 +18,21 @@ client = chromadb.Client(
 collection = client.get_or_create_collection("rag_docs")
 
 load_dotenv()   # Load environment variables from .env file
-
+'''
 llm = InferenceClient(
     model=LLM_MODEL,
     token=os.getenv("HF_TOKEN") or st.secrets.get("HF_TOKEN")
 )
+'''
+
+
+
+# Token
+GROQ_API_KEY = st.secrets.get("GROQ_API_KEY") or os.getenv("GROQ_API_KEY")
+
+# Client
+client = Groq(api_key=GROQ_API_KEY)
+
 
 
 def add_documents(chunks, source):
@@ -43,6 +54,7 @@ def retrieve_docs(query, k=3):
 
 
 def generate_llm_response(prompt):
+    '''
     response = llm.chat_completion(
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
@@ -50,5 +62,19 @@ def generate_llm_response(prompt):
         ],
         max_tokens=300
     )
-    answer = response.choices[0].message["content"]
+    '''
+    # LLM call
+    response = client.chat.completions.create(
+        model="llama3-8b-8192",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt}
+        ],
+        max_tokens=300
+    )
+
+    answer = response.choices[0].message.content
+    
+    
+    #answer = response.choices[0].message["content"]
     return answer
