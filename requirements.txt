@@ -3,3 +3,4 @@ chromadb
 huggingface-hub
 pypdf
 python-dotenv
+groq
