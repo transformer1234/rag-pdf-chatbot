@@ -6,6 +6,7 @@
 ![Groq](https://img.shields.io/badge/LLM-Groq%20API-black?logo=groq)
 ![RAG](https://img.shields.io/badge/architecture-RAG-blueviolet)
 ![License](https://img.shields.io/badge/license-MIT-green)
+[![Live Demo](https://img.shields.io/badge/live%20demo-streamlit-FF4B4B?logo=streamlit)](https://mt-rag-pdf-chatbot.streamlit.app/)
 
 A Retrieval-Augmented Generation (RAG) application that allows users to upload PDFs and ask questions based on their content.
 
