@@ -30,5 +30,4 @@ A Retrieval-Augmented Generation (RAG) application that allows users to upload P
 ## ▶️ How to Run
 ```bash
 pip install -r requirements.txt
-cd src
-streamlit run app.py
+python -m streamlit run src/app.py
