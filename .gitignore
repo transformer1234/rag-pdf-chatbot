@@ -7,3 +7,4 @@ data/chroma_db/
 .idea/
 .streamlit/secrets.toml
 venv/
+.streamlit/
