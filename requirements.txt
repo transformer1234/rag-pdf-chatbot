@@ -1,6 +1,6 @@
 streamlit
 chromadb==0.4.24
-sentence-transformers==2.7.0
+huggingface-hub
 pypdf
 python-dotenv
 groq
