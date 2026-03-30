@@ -1,6 +1,7 @@
 streamlit
-chromadb
-sentence-transformers
+chromadb==0.4.24
+sentence-transformers==2.7.0
 pypdf
 python-dotenv
 groq
+numpy<2.0
