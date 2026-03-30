@@ -23,7 +23,7 @@ pdfs = st.sidebar.file_uploader(
 
 if pdfs:
     for pdf in pdfs:
-        with st.sidebar.spinner(f"Indexing {pdf.name}..."):
+        with st.spinner(f"Indexing {pdf.name}..."):
             text = load_pdf_text(pdf)
             chunks = chunk_text(text)
             add_documents(chunks, pdf.name)
