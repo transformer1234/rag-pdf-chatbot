@@ -1,6 +1,6 @@
 streamlit
 chromadb
-huggingface-hub
+sentence-transformers
 pypdf
 python-dotenv
 groq

@@ -1,80 +1,53 @@
-import chromadb
 import os
-from dotenv import load_dotenv
+import chromadb
 import streamlit as st
 from groq import Groq
-#from sentence_transformers import SentenceTransformer
-from huggingface_hub import InferenceClient
-from config import *
+from sentence_transformers import SentenceTransformer
+from config import LLM_MODEL, EMBEDDING_MODEL, CHROMA_PATH, CHROMA_COLLECTION, MAX_TOKENS, TOP_K_RESULTS
+from dotenv import load_dotenv
 
-#embedding_model = SentenceTransformer(EMBEDDING_MODEL)
+load_dotenv()
 
-client = chromadb.Client(
-    settings=chromadb.Settings(
-        persist_directory=CHROMA_PATH
-    )
-)
+# Persistent ChromaDB client — survives app restarts
+chroma_client = chromadb.PersistentClient(path=CHROMA_PATH)
+collection = chroma_client.get_or_create_collection(CHROMA_COLLECTION)
 
-collection = client.get_or_create_collection("rag_docs")
+# Explicit embedding model
+embedding_model = SentenceTransformer(EMBEDDING_MODEL)
 
-load_dotenv()   # Load environment variables from .env file
-'''
-llm = InferenceClient(
-    model=LLM_MODEL,
-    token=os.getenv("HF_TOKEN") or st.secrets.get("HF_TOKEN")
-)
-'''
-
-
-
-# Token
+# Groq client
 GROQ_API_KEY = st.secrets.get("GROQ_API_KEY") or os.getenv("GROQ_API_KEY")
-
-# Client
-client = Groq(api_key=GROQ_API_KEY)
-
+groq_client = Groq(api_key=GROQ_API_KEY)
 
 
 def add_documents(chunks, source):
-    for i, chunk in enumerate(chunks):
+    embeddings = embedding_model.encode(chunks).tolist()
+    for i, (chunk, embedding) in enumerate(zip(chunks, embeddings)):
         collection.add(
             documents=[chunk],
+            embeddings=[embedding],
             ids=[f"{source}_{i}"],
             metadatas=[{"source": source}]
         )
 
 
-def retrieve_docs(query, k=3):
+def retrieve_docs(query, k=TOP_K_RESULTS):
+    query_embedding = embedding_model.encode([query]).tolist()
     results = collection.query(
-        query_texts=[query],
+        query_embeddings=query_embedding,
         n_results=k,
-        include=["documents","metadatas"]
+        include=["documents", "metadatas"]
     )
     return results
 
 
 def generate_llm_response(prompt):
-    '''
-    response = llm.chat_completion(
-        messages=[
-            {"role": "system", "content": "You are a helpful assistant."},
-            {"role": "user", "content": prompt}
-        ],
-        max_tokens=300
-    )
-    '''
-    # LLM call
-    response = client.chat.completions.create(
+    response = groq_client.chat.completions.create(
         model=LLM_MODEL,
         messages=[
-            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "system", "content": "You are a helpful assistant that answers questions based on provided context. Be concise and accurate."},
             {"role": "user", "content": prompt}
         ],
-        max_tokens=300
+        max_tokens=MAX_TOKENS
     )
-
-    answer = response.choices[0].message.content
-    
-    
-    #answer = response.choices[0].message["content"]
-    return answer
+    return response.choices[0].message.content
