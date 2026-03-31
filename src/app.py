@@ -71,8 +71,8 @@ if user_query:
 
         if source_label == "web" and source_list:
             st.caption(f"🌐 Web: {', '.join(source_list)}")
-        elif source_label == "pdf" and source_list:
-            st.caption(f"📄 PDF: {', '.join(source_list)}")
+        elif source_label == "pdf/txt" and source_list:
+            st.caption(f"📄 PDF/TXT: {', '.join(source_list)}")
         else:
             st.caption("🧠 LLM knowledge")
 

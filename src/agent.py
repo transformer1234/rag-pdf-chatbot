@@ -14,7 +14,7 @@ LLM_KNOWLEDGE_KEYWORDS = [
 ]
 
 DOCUMENT_KEYWORDS = [
-    "document", "pdf", "uploaded", "file", "text", "chapter",
+    "document", "pdf", "txt", "uploaded", "file", "text", "chapter",
     "page", "according to", "mentioned", "says", "content"
 ]
 

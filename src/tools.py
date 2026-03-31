@@ -15,7 +15,7 @@ def answer_with_context(query, context, sources, memory):
         unique_sources = list(dict.fromkeys(sources))  # preserve order, dedupe
     else:
         system_context = "uploaded documents"
-        source_label = "pdf"
+        source_label = "pdf/txt"
         unique_sources = list(set(sources))  # dedupe filenames
 
     prompt = f"""Chat History:
