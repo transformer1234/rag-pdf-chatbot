@@ -5,3 +5,4 @@ pypdf
 python-dotenv
 groq
 numpy<2.0
+tavily-python
