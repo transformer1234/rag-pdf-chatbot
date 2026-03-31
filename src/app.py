@@ -1,12 +1,12 @@
 import streamlit as st
-from pdf_utils import load_pdf_text, chunk_text
+from pdf_utils import load_pdf_text, load_txt_text, chunk_text
 from rag_pipeline import add_documents, collection
 from agent import agent_decide_and_act
 from memory import update_memory
 
-st.set_page_config(page_title="RAG PDF Chatbot", layout="wide")
-st.title("RAG PDF Chatbot")
-st.caption("Upload PDFs and ask questions. Powered by ChromaDB + Groq (llama-3.1-8b-instant).")
+st.set_page_config(page_title="RAG Chatbot", layout="wide")
+st.title("RAG Chatbot")
+st.caption("Upload PDFs/TXTs and ask questions. Powered by ChromaDB + Groq (llama-3.1-8b-instant).")
 
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
@@ -16,15 +16,18 @@ if "messages" not in st.session_state:
 # Sidebar
 st.sidebar.header("Knowledge Base")
 pdfs = st.sidebar.file_uploader(
-    "Upload PDF files",
-    type="pdf",
+    "Upload PDF/TXT files",
+    type=["pdf", "txt"],
     accept_multiple_files=True
 )
 
 if pdfs:
     for pdf in pdfs:
         with st.spinner(f"Indexing {pdf.name}...this may take a moment for large files."):
-            text = load_pdf_text(pdf)
+            if pdf.name.endswith(".txt"):
+                text = load_txt_text(pdf)
+            else:
+                text = load_pdf_text(pdf)
             chunks = chunk_text(text)
             add_documents(chunks, pdf.name)
     st.sidebar.success(f"Indexed {len(pdfs)} PDF(s) successfully!")

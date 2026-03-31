@@ -7,6 +7,8 @@ def load_pdf_text(file):
         text += page.extract_text()
     return text
 
+def load_txt_text(file) -> str:
+    return file.read().decode("utf-8")
 
 def chunk_text(text, chunk_size=500, overlap=100):
     chunks = []
