@@ -60,10 +60,11 @@ if user_query:
                 st.session_state.chat_history
             )
         st.write(response)
-        if isinstance(response_sources, tuple):
-            source_list, source_label = response_sources
+
+        if isinstance(sources, tuple):
+            source_list, source_label = sources
         else:
-            source_list, source_label = response_sources, "llm"
+            source_list, source_label = None, "llm"
 
         if source_label == "web" and source_list:
             st.caption(f"🌐 Web: {', '.join(source_list)}")
@@ -71,9 +72,10 @@ if user_query:
             st.caption(f"📄 PDF: {', '.join(source_list)}")
         else:
             st.caption("🧠 LLM knowledge")
+
     st.session_state.messages.append({
         "role": "assistant",
         "content": response,
-        "sources": sources
+        "sources": source_list
     })
     update_memory(st.session_state.chat_history, user_query, response)

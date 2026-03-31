@@ -12,9 +12,11 @@ def answer_with_context(query, context, sources, memory):
     if is_web:
         system_context = "web search results"
         source_label = "web"
+        unique_sources = list(dict.fromkeys(sources))  # preserve order, dedupe
     else:
         system_context = "uploaded documents"
         source_label = "pdf"
+        unique_sources = list(set(sources))  # dedupe filenames
 
     prompt = f"""Chat History:
 {memory}
@@ -28,7 +30,7 @@ Question:
 Answer based on the context above. Be specific and accurate."""
 
     answer = generate_llm_response(prompt)
-    return answer, (sources, source_label)
+    return answer, (unique_sources, source_label)
 
 
 def direct_answer(query, memory):
