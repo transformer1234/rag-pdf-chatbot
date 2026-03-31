@@ -60,11 +60,15 @@ if user_query:
                 st.session_state.chat_history
             )
         st.write(response)
-        if sources:
-            if sources[0].startswith("http"):
-                st.caption(f"🌐 Web: {sources}")
-            else:
-                st.caption(f"📄 PDF: {sources}")
+        if isinstance(response_sources, tuple):
+            source_list, source_label = response_sources
+        else:
+            source_list, source_label = response_sources, "llm"
+
+        if source_label == "web" and source_list:
+            st.caption(f"🌐 Web: {', '.join(source_list)}")
+        elif source_label == "pdf" and source_list:
+            st.caption(f"📄 PDF: {', '.join(source_list)}")
         else:
             st.caption("🧠 LLM knowledge")
     st.session_state.messages.append({

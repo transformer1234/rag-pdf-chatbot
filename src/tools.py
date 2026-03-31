@@ -6,19 +6,29 @@ def search_docs(query):
 
 
 def answer_with_context(query, context, sources, memory):
-    sources_text = "\n".join(set(sources))
+    # Detect source type
+    is_web = any(s.startswith("http") for s in sources)
+
+    if is_web:
+        system_context = "web search results"
+        source_label = "web"
+    else:
+        system_context = "uploaded documents"
+        source_label = "pdf"
+
     prompt = f"""Chat History:
 {memory}
 
-Context from uploaded documents:
+Context from {system_context}:
 {context}
 
 Question:
 {query}
 
-Answer based on the context above. Be specific and cite relevant details."""
+Answer based on the context above. Be specific and accurate."""
+
     answer = generate_llm_response(prompt)
-    return answer, sources_text
+    return answer, (sources, source_label)
 
 
 def direct_answer(query, memory):
@@ -29,4 +39,4 @@ Question:
 {query}
 
 Answer:"""
-    return generate_llm_response(prompt), None
+    return generate_llm_response(prompt), (None, "llm")
