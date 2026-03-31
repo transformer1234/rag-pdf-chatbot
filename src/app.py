@@ -30,7 +30,7 @@ if pdfs:
                 text = load_pdf_text(pdf)
             chunks = chunk_text(text)
             add_documents(chunks, pdf.name)
-    st.sidebar.success(f"Indexed {len(pdfs)} PDF(s) successfully!")
+    st.sidebar.success(f"Indexed {len(pdfs)} PDF/TXT(s) successfully!")
 
 # Show indexed docs count
 doc_count = collection.count()
