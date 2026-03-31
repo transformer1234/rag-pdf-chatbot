@@ -61,8 +61,12 @@ if user_query:
             )
         st.write(response)
         if sources:
-            st.caption(f"Sources: {sources}")
-
+            if sources[0].startswith("http"):
+                st.caption(f"🌐 Web: {sources}")
+            else:
+                st.caption(f"📄 PDF: {sources}")
+        else:
+            st.caption("🧠 LLM knowledge")
     st.session_state.messages.append({
         "role": "assistant",
         "content": response,
